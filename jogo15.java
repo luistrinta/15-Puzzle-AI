@@ -40,7 +40,7 @@ public class jogo15 extends Search{
     if(result){
     System.out.println("Solvable");
 
-    //give Xaxis and Yaxis values
+    //print the table if it works
     printTable(values);
 
   }
