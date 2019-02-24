@@ -22,7 +22,7 @@ static void BFS(Tabela t_inicial,Tabela t_final){
               Tabela t2 = new_Tabela(str,valor);
               queue.add(t2);
               //printTabela(t2);
-              System.out.println("-----------------");
+              //System.out.println("-----------------");
                              }
                            }
 
