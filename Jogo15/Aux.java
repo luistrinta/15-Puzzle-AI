@@ -1,30 +1,48 @@
 import java.util.*;
+
 public class Aux extends Tabela {
+
     static void BFS(Tabela t_inicial, Tabela t_final) {
+        long start_Time = System.currentTimeMillis();
+        long beforeUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         //variavel de incrememnto do numero de nos
-        Queue<Tabela> queue = new LinkedList<>();
+        Queue < Tabela > queue = new LinkedList < > ();
+
         queue.add(t_inicial);
+
         boolean flag = true;
         int counter = 0;
-        while(flag) {
-            counter++;
-            Tabela t = queue.poll();
-            Tabela valor = copyTabela(t);
+
+        while (flag) {
+
+            Tabela valor = queue.poll();
             String[] s = checkMoves(valor);
-            for(String str : s) {
-                if(str != null) {
+
+            for (String str: s) {
+                if (str != null) {
                     Tabela t2 = moveTabela(str, valor);
                     queue.add(t2);
                 }
             }
-            if(equalsTabela(valor, t_final)) {
+
+
+
+            if (equalsTabela(valor.arr, t_final.arr)) {
                 flag = false;
-                System.out.println("Done in " + counter + " steps!");
+                long stop_Time = System.currentTimeMillis();
+                long afterUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+                long actualMemUsed = afterUsedMem - beforeUsedMem;
+                long tempo_exec = (stop_Time - start_Time);
+                System.out.println("Execution time: " + tempo_exec + "ms");
+                System.out.println("Memory used : " + actualMemUsed + " Bytes");
                 System.out.println("Path:" + valor.path);
                 System.out.println("Path length:" + valor.path.length());
             }
         }
     }
+
+
+
     static boolean testSolvability(Tabela t) {
         //https://www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html
         int puzzle[] = t.arr;
@@ -34,14 +52,15 @@ public class Aux extends Tabela {
         int blankRow = 0; // numero 0
 
         //Verificar se tem 16 peças e se são entre 0 e 15
-        
-        if(puzzle.length != 16)return false;
 
-        int arr1[]=t.arr.clone();
+        if (puzzle.length != 16) return false;
+
+        int arr1[] = t.arr.clone();
         Arrays.sort(arr1);
-        for(int i = 0; i <= 15; i++)if(arr1[i] != i) {
-            return false;
-        }
+        for (int i = 0; i <= 15; i++)
+            if (arr1[i] != i) {
+                return false;
+            }
 
 
         for (int i = 0; i < puzzle.length; i++) {
@@ -55,7 +74,7 @@ public class Aux extends Tabela {
         }
         if (blankRow % 2 == 0) { //0 numa linha impar a contar da ultima
             return parity % 2 == 0;
-        } else { 
+        } else {
             return parity % 2 != 0;
         }
     }
@@ -63,9 +82,10 @@ public class Aux extends Tabela {
         Arrays.sort(arr);
         System.out.println(Arrays.toString(arr));
         //Verificar se tem 16 elementos
-        if(arr.length != 16)return false;
+        if (arr.length != 16) return false;
         //Verificar se os elemnentos são entre 0 e 15
-        for(int i = 0; i <= 15; i++)if(arr[i] != i) return false;
+        for (int i = 0; i <= 15; i++)
+            if (arr[i] != i) return false;
         return true;
     }
 }
