@@ -7,24 +7,29 @@ public class Aux extends Tabela {
         long beforeUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         //variavel de incrememnto do numero de nos
         Queue < Tabela > queue = new LinkedList < > ();
+        HashMap < String, Tabela > map = new HashMap < String, Tabela > ();
 
-        queue.add(t_inicial);
-
-        boolean flag = true;
         int counter = 0;
-
+        queue.add(t_inicial);
+        boolean flag = true;
         while (flag) {
 
             Tabela valor = queue.poll();
-            String[] s = checkMoves(valor);
+            String key = Arrays.toString(getArr(valor));
+            if (!map.containsKey(key)) {
+                map.put(key, valor);
 
-            for (String str: s) {
-                if (str != null) {
-                    Tabela t2 = moveTabela(str, valor);
-                    queue.add(t2);
+                String[] s = checkMoves(valor);
+                for (String str: s) {
+                    if (str != null) {
+                        Tabela t2 = moveTabela(str, valor);
+                        if (!(Arrays.equals(getPai(t2), getPai(valor))))
+                            queue.add(t2);
+                        counter++;
+                    }
                 }
-            }
 
+            }
 
 
             if (equalsTabela(valor.arr, t_final.arr)) {
@@ -37,6 +42,7 @@ public class Aux extends Tabela {
                 System.out.println("Memory used : " + actualMemUsed + " Bytes");
                 System.out.println("Path:" + valor.path);
                 System.out.println("Path length:" + valor.path.length());
+                System.out.println(" nº nos : " + counter);
             }
         }
     }
@@ -78,14 +84,5 @@ public class Aux extends Tabela {
             return parity % 2 != 0;
         }
     }
-    static boolean isRight(int[] arr) {
-        Arrays.sort(arr);
-        System.out.println(Arrays.toString(arr));
-        //Verificar se tem 16 elementos
-        if (arr.length != 16) return false;
-        //Verificar se os elemnentos são entre 0 e 15
-        for (int i = 0; i <= 15; i++)
-            if (arr[i] != i) return false;
-        return true;
-    }
+
 }
