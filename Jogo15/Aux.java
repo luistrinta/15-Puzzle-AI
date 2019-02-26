@@ -5,7 +5,7 @@ public class Aux extends Tabela {
     static void BFS(Tabela t_inicial, Tabela t_final) {
         long start_Time = System.currentTimeMillis();
         long beforeUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-        //variavel de incrememnto do numero de nos
+
         Queue < Tabela > queue = new LinkedList < > ();
         HashMap < String, Tabela > map = new HashMap < String, Tabela > ();
 
@@ -20,7 +20,8 @@ public class Aux extends Tabela {
                 map.put(key, valor);
 
                 String[] s = checkMoves(valor);
-                for (String str: s) {
+
+                for (String str : s) {
                     if (str != null) {
                         Tabela t2 = moveTabela(str, valor);
                         if (!(Arrays.equals(getPai(t2), getPai(valor))))
@@ -85,4 +86,57 @@ public class Aux extends Tabela {
         }
     }
 
+    static void DFS(Tabela t_inicial, Tabela t_final, int depth) {
+        long start_Time = System.currentTimeMillis();
+        long beforeUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+
+        Stack < Tabela > queue = new Stack < > ();
+        HashMap < String, Tabela > map = new HashMap < String, Tabela > ();
+
+        int counter = 0;
+        queue.push(t_inicial);
+
+        while (!queue.isEmpty()) {
+
+            Tabela valor = queue.pop();
+            String key = Arrays.toString(getArr(valor));
+            if(valor.path.length() <= depth) {
+                if (!map.containsKey(key)) {
+                    map.put(key, valor);
+
+                    String[] s = checkMoves(valor);
+
+                    for (String str : s) {
+                        if (str != null) {
+                            Tabela t2 = moveTabela(str, valor);
+                            if (!(Arrays.equals(getPai(t2), getPai(valor))))
+                                queue.push(t2);
+                            counter++;
+                        }
+                    }
+
+                }
+            }
+
+
+            if (equalsTabela(valor.arr, t_final.arr)) {
+
+                long stop_Time = System.currentTimeMillis();
+                long afterUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+                long actualMemUsed = afterUsedMem - beforeUsedMem;
+                long tempo_exec = (stop_Time - start_Time);
+                System.out.println("Execution time: " + tempo_exec + "ms");
+                System.out.println("Memory used : " + actualMemUsed + " Bytes");
+                System.out.println("Path:" + valor.path);
+                System.out.println("Path length:" + valor.path.length());
+                System.out.println(" nº nos : " + counter);
+                return;
+            }
+        }
+        System.out.println("Não existe solução a esta profundidade");
+    }
+
 }
+
+
+
