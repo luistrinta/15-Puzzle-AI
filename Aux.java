@@ -43,7 +43,7 @@ public class Aux extends Tabela {
                 System.out.println("Memory used : " + actualMemUsed + " Bytes");
                 System.out.println("Path:" + valor.path);
                 System.out.println("Path length:" + valor.path.length());
-                System.out.println(" nº nos : " + counter);
+                System.out.println(" nº Tabelas : " + counter);
             }
         }
     }
@@ -129,11 +129,65 @@ public class Aux extends Tabela {
                 System.out.println("Memory used : " + actualMemUsed + " Bytes");
                 System.out.println("Path:" + valor.path);
                 System.out.println("Path length:" + valor.path.length());
-                System.out.println(" nº nos : " + counter);
+                System.out.println(" nº Tabelas : " + counter);
                 return;
             }
         }
         System.out.println("Não existe solução a esta profundidade");
+    }
+    static String[] auxDFS(Tabela t_inicial, Tabela t_final, int depth) {
+        Stack < Tabela > queue = new Stack < > ();
+        HashMap < String, Tabela > map = new HashMap < String, Tabela > ();
+        int counter = 0;
+        queue.push(t_inicial);
+        String[] v={"1","","0"}; 
+        while (!queue.isEmpty()) {
+            Tabela valor = queue.pop();
+            String key = Arrays.toString(getArr(valor));
+            if(valor.path.length() <= depth) {
+                if (!map.containsKey(key)) {
+                    map.put(key, valor);
+                    String[] s = checkMoves(valor);
+                    for (String str : s) {
+                        if (str != null) {
+                            Tabela t2 = moveTabela(str, valor);
+                            if (!(Arrays.equals(getPai(t2), getPai(valor))))
+                                queue.push(t2);
+                            counter++;
+                        }
+                    }
+                }
+            }
+            if (equalsTabela(valor.arr, t_final.arr)) {
+                v[2]=Integer.toString(counter);
+                v[1]=valor.path;
+                return v;
+            }
+        }
+        v[2]=Integer.toString(counter);
+        v[0]="0";
+        return v;
+    }
+    public static void IDFS(Tabela t_inicial, Tabela t_final) {
+        long start_Time = System.currentTimeMillis();
+        long beforeUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+        int counter=1,i=0,fours=1,f1=1;
+        String[] v= auxDFS(t_inicial, t_final, 0);
+        while(v[0]=="0") {
+            v=auxDFS(t_inicial, t_final, i);
+            counter=counter+Integer.parseInt(v[2]);
+            i++;
+        }
+        long stop_Time = System.currentTimeMillis();
+        long afterUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+        long actualMemUsed = afterUsedMem - beforeUsedMem;
+        long tempo_exec = (stop_Time - start_Time);
+        System.out.println("Execution time: " + tempo_exec + "ms");
+        System.out.println("Memory used : " + actualMemUsed + " Bytes");
+        System.out.println("Path:" + v[1]);
+        System.out.println("Path length:" + v[1].length());
+        System.out.println(" nº Tabelas : " + counter);
+        return;
     }
 
 }
