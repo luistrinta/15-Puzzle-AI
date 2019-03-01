@@ -4,32 +4,38 @@ public class Tabela {
     public int[] arr;
     public String path = "";
     public int[] pai;
+    public int cost;
+    public int[] solution;
 
     public Tabela() {
         arr = new int[16];
         path = "";
-        //   = "";
         pai = new int[16];
+        cost = 0;
+        solution = new int[16];
     }
 
     public Tabela(int[] v) {
         arr = v;
         path = "";
-        //   = "";
         pai = new int[16];
+        cost = 0;
+        solution = new int[16];
     }
 
     public Tabela(Tabela t) {
 
         arr = t.arr;
         path = t.path;
-        //   = t.;
         pai = getPai(t);
+        cost = t.cost;
+        solution = t.solution;
     }
 
-    // public static String get(Tabela t) {
-    //     return t.;
-    // }
+
+    public static int getCost(Tabela t) {
+        return t.cost;
+    }
 
     public static int[] getPai(Tabela t) {
         return t.pai;
@@ -40,15 +46,22 @@ public class Tabela {
     }
 
 
-    public static void scanTabela(Tabela t) {
+    public static void scanTabelas(Tabela t_inicial, Tabela t_final) {
 
         Scanner scan = new Scanner(System.in);
 
         for (int i = 0; i < 16; i++) {
-            t.arr[i] = scan.nextInt();
+            t_inicial.arr[i] = scan.nextInt();
         }
-        t.pai = null;
+        t_inicial.pai = null;
 
+
+        for (int i = 0; i < 16; i++) {
+            t_final.arr[i] = scan.nextInt();
+        }
+        t_final.pai = null;
+
+        t_inicial.solution = t_final.arr;
     }
 
 
@@ -102,41 +115,41 @@ public class Tabela {
 
 
         switch (s) {
-            case "C":
-                ti = t_final.arr[pos - 4];
-                t_final.arr[pos - 4] = 0;
-                t_final.arr[pos] = ti;
-                t_final.path += "C";
-                //  t_final. = "C";
-                t_final.pai = getArr(t);
-                break;
+        case "C":
+            ti = t_final.arr[pos - 4];
+            t_final.arr[pos - 4] = 0;
+            t_final.arr[pos] = ti;
+            t_final.path += "C";
+            t_final.pai = getArr(t);
+            t_final.solution = t.solution;
+            break;
 
-            case "B":
-                ti = t_final.arr[pos + 4];
-                t_final.arr[pos + 4] = 0;
-                t_final.arr[pos] = ti;
-                t_final.path += "B";
-                //t_final. = "B";
-                t_final.pai = getArr(t);
-                break;
+        case "B":
+            ti = t_final.arr[pos + 4];
+            t_final.arr[pos + 4] = 0;
+            t_final.arr[pos] = ti;
+            t_final.path += "B";
+            t_final.pai = getArr(t);
+            t_final.solution = t.solution;
+            break;
 
-            case "E":
-                ti = t_final.arr[pos - 1];
-                t_final.arr[pos - 1] = 0;
-                t_final.arr[pos] = ti;
-                t_final.path += "E";
-                //t_final. = "E";
-                t_final.pai = getArr(t);
-                break;
+        case "E":
+            ti = t_final.arr[pos - 1];
+            t_final.arr[pos - 1] = 0;
+            t_final.arr[pos] = ti;
+            t_final.path += "E";
+            t_final.pai = getArr(t);
+            t_final.solution = t.solution;
+            break;
 
-            case "D":
-                ti = t_final.arr[pos + 1];
-                t_final.arr[pos + 1] = 0;
-                t_final.arr[pos] = ti;
-                t_final.path += "D";
-                //t_final. = "D";
-                t_final.pai = getArr(t);
-                break;
+        case "D":
+            ti = t_final.arr[pos + 1];
+            t_final.arr[pos + 1] = 0;
+            t_final.arr[pos] = ti;
+            t_final.path += "D";
+            t_final.pai = getArr(t);
+            t_final.solution = t.solution;
+            break;
 
         }
 
@@ -174,7 +187,5 @@ public class Tabela {
 
 
     }
-
-
 
 }
