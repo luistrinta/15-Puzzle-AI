@@ -4,7 +4,7 @@ public class test extends Aux {
     public static Scanner scan = new Scanner(System.in);
 
     public static void main(String[] args) {
-        //BFS test
+       
         int[] t_arr = new int[16];
         int[] t2_arr = new int[16];
 
