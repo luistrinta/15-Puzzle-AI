@@ -10,13 +10,13 @@ public class Aux extends Tabela {
         HashMap < String, Tabela > map = new HashMap < String, Tabela > ();
 
         int counter = 0;
-        // int filhos =0;
+        
         queue.add(t_inicial);
         boolean flag = true;
         while (flag) {
 
             Tabela valor = queue.poll();
-            //filhos ++;
+           
 
             String key = Arrays.toString(getArr(valor));
             if (!map.containsKey(key)) {
@@ -43,11 +43,12 @@ public class Aux extends Tabela {
                 long actualMemUsed = afterUsedMem - beforeUsedMem;
                 long tempo_exec = (stop_Time - start_Time);
                 System.out.println("Execution time: " + tempo_exec + "ms");
-                System.out.println("Memory used : " + actualMemUsed / 1000000 + "MB");
+                if(actualMemUsed < 1000000)System.out.println("Memory used : " + actualMemUsed / 1000 + "Kb");
+                else System.out.println("Memory used : " + actualMemUsed / 1000000 + "MB");
                 System.out.println("Path:" + valor.path);
-                System.out.println("Path length:" + valor.path.length());
+                System.out.println("Path length:" + (valor.path.length()-1));
                 System.out.println(" nº nos : " + counter);
-                // System.out.println("nº visitados :" + filhos);
+               
             }
         }
     }
@@ -90,36 +91,34 @@ public class Aux extends Tabela {
         }
     }
 
+
     static void DFS(Tabela t_inicial, int[] t_final) {
         long start_Time = System.currentTimeMillis();
         long beforeUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 
-        Stack < Tabela > queue = new Stack < > ();
-        HashMap < String, Tabela > map = new HashMap < String, Tabela > ();
+        Stack < Tabela > stk = new Stack < > ();
 
         int counter = 0;
-        queue.push(t_inicial);
 
-        while (!queue.isEmpty()) {
+        stk.push(t_inicial);
+        boolean flag = true;
+        while (!stk.isEmpty()) {
 
-            Tabela valor = queue.pop();
-            String key = Arrays.toString(getArr(valor));
-            if(valor.path.length() <= 80) {
-                if (!map.containsKey(key)) {
-                    map.put(key, valor);
+            Tabela valor = stk.pop();
+            if(valor.path.length() < 20) {
 
-                    String[] s = checkMoves(valor);
+                String[] s = checkMoves(valor);
 
-                    for (String str : s) {
-                        if (str != null) {
+                for (String str : s) {
+                    if (str != null) {
+                        if(str.charAt(0) != reversed(valor.path.charAt(valor.path.length() - 1))) {
                             Tabela t2 = moveTabela(str, valor);
-                            if (!(Arrays.equals(getPai(t2), getPai(valor))))
-                                queue.push(t2);
+                            stk.push(t2);
                             counter++;
                         }
                     }
-
                 }
+
             }
 
 
@@ -130,16 +129,16 @@ public class Aux extends Tabela {
                 long actualMemUsed = afterUsedMem - beforeUsedMem;
                 long tempo_exec = (stop_Time - start_Time);
                 System.out.println("Execution time: " + tempo_exec + "ms");
-                System.out.println("Memory used : " + actualMemUsed / 1000000 + "MB");
+                if(actualMemUsed < 1000000)System.out.println("Memory used : " + actualMemUsed / 1000 + "Kb");
+                else System.out.println("Memory used : " + actualMemUsed / 1000000 + "MB");
                 System.out.println("Path:" + valor.path);
-                System.out.println("Path length:" + valor.path.length());
+                System.out.println("Path length:" + (valor.path.length()-1));
                 System.out.println(" nº nos : " + counter);
+                
                 return;
             }
         }
-        System.out.println("Não existe solução a esta profundidade");
     }
-
 
     static String[] auxDFS(Tabela t_inicial, Tabela t_final, int depth) {
         Stack < Tabela > queue = new Stack < > ();
@@ -151,19 +150,21 @@ public class Aux extends Tabela {
             Tabela valor = queue.pop();
             String key = Arrays.toString(getArr(valor));
             if(valor.path.length() <= depth) {
-               if (!map.containsKey(key)) {
-                    map.put(key, valor);
+               
                     String[] s = checkMoves(valor);
                     for (String str : s) {
                         if (str != null) {
-                            Tabela t2 = moveTabela(str, valor);
-                            if (!(Arrays.equals(getPai(t2), getPai(valor))))
-                                queue.push(t2);
-                            counter++;
+                            if(str.charAt(0) != reversed(valor.path.charAt(valor.path.length() - 1))) {
+                                Tabela t2 = moveTabela(str, valor);
+                                if (!(Arrays.equals(getPai(t2), getPai(valor))))
+                                    queue.push(t2);
+                                counter++;
+                            }
                         }
                     }
-                }
-            }
+                
+            } 
+
             if (equalsTabela(valor.arr, t_final.arr)) {
                 v[2] = Integer.toString(counter);
                 v[1] = valor.path;
@@ -189,14 +190,16 @@ public class Aux extends Tabela {
         long actualMemUsed = afterUsedMem - beforeUsedMem;
         long tempo_exec = (stop_Time - start_Time);
         System.out.println("Execution time: " + tempo_exec + "ms");
-        System.out.println("Memory used : " + actualMemUsed + " Bytes");
+        if(actualMemUsed < 1000000)System.out.println("Memory used : " + actualMemUsed / 1000 + "Kb");
+        else System.out.println("Memory used : " + actualMemUsed / 1000000 + "MB");
+        //System.out.println("Memory used : " + actualMemUsed + " Bytes");
         System.out.println("Path:" + v[1]);
-        System.out.println("Path length:" + v[1].length());
+        System.out.println("Path length:" +( v[1].length()-1));
         System.out.println(" nº Tabelas : " + counter);
         return;
     }
 
-    //Heuristicas 
+    //Heuristicas
 
     public static int heuristicSum(int[] t_avaliar, int[] t_final) {
 
@@ -256,23 +259,23 @@ public class Aux extends Tabela {
             return 0;
         }
     }
-    
+
     static class A_starComparator implements Comparator<Tabela> {
 
         //Override do metodo compare do Comparator
         public int compare(Tabela t1, Tabela t2) {
-            if (heuristicManhattan(t1.arr, t1.solution) > heuristicManhattan(t2.arr, t2.solution)){
+            if (heuristicManhattan(t1.arr, t1.solution) > heuristicManhattan(t2.arr, t2.solution)) {
                 if (heuristicSum(t1.arr, t1.solution) > heuristicSum(t2.arr, t2.solution))
                     return 1;
-                
-                    return -1;
-            }
+
                 return -1;
+            }
+            return -1;
 
         }
     }
 
- 
+
 
 
 
@@ -284,13 +287,13 @@ public class Aux extends Tabela {
         HashMap < String, Tabela > map = new HashMap < String, Tabela > ();
 
         int counter = 0;
-        // int filhos =0;
+        
         queue.add(t_inicial);
         boolean flag = true;
         while (!queue.isEmpty()) {
 
             Tabela valor = queue.poll();
-            //filhos ++;
+            
 
             String key = Arrays.toString(getArr(valor));
             if (!map.containsKey(key)) {
@@ -316,9 +319,10 @@ public class Aux extends Tabela {
                 long actualMemUsed = afterUsedMem - beforeUsedMem;
                 long tempo_exec = (stop_Time - start_Time);
                 System.out.println("Execution time: " + tempo_exec + "ms");
-                System.out.println("Memory used : " + actualMemUsed / 1000000 + "MB");
+                if(actualMemUsed < 1000000)System.out.println("Memory used : " + actualMemUsed / 1000 + "Kb");
+                else System.out.println("Memory used : " + actualMemUsed / 1000000 + "MB");
                 System.out.println("Path:" + valor.path);
-                System.out.println("Path length:" + valor.path.length());
+                System.out.println("Path length:" + (valor.path.length()-1));
                 System.out.println(" nº nos : " + counter);
                 return;
             }
@@ -338,7 +342,7 @@ public class Aux extends Tabela {
         int counter = 0;
         // int filhos =0;
         queue.add(t_inicial);
-        
+
         while (!queue.isEmpty()) {
 
             Tabela valor = queue.poll();
@@ -368,9 +372,10 @@ public class Aux extends Tabela {
                 long actualMemUsed = afterUsedMem - beforeUsedMem;
                 long tempo_exec = (stop_Time - start_Time);
                 System.out.println("Execution time: " + tempo_exec + "ms");
-                System.out.println("Memory used : " + actualMemUsed / 1000000 + "MB");
+                if(actualMemUsed < 1000000)System.out.println("Memory used : " + actualMemUsed / 1000 + "Kb");
+                else System.out.println("Memory used : " + actualMemUsed / 1000000 + "MB");
                 System.out.println("Path:" + valor.path);
-                System.out.println("Path length:" + valor.path.length());
+                System.out.println("Path length:" + (valor.path.length()-1));
                 System.out.println(" nº nos : " + counter);
                 return;
             }
@@ -419,9 +424,10 @@ public class Aux extends Tabela {
                 long actualMemUsed = afterUsedMem - beforeUsedMem;
                 long tempo_exec = (stop_Time - start_Time);
                 System.out.println("Execution time: " + tempo_exec + "ms");
-                System.out.println("Memory used : " + actualMemUsed / 1000000 + "MB");
+                if(actualMemUsed < 1000000)System.out.println("Memory used : " + actualMemUsed / 1000 + "Kb");
+                else System.out.println("Memory used : " + actualMemUsed / 1000000 + "MB");
                 System.out.println("Path:" + valor.path);
-                System.out.println("Path length:" + valor.path.length());
+                System.out.println("Path length:" + (valor.path.length()-1));
                 System.out.println(" nº nos : " + counter);
                 return;
             }
