@@ -2,14 +2,14 @@ import java.util.*;
 
 public class Tabela {
     public int[] arr;
-    public String path = "";
+    public String path = " ";
     public int[] pai;
     public int cost;
     public int[] solution;
 
     public Tabela() {
         arr = new int[16];
-        path = "";
+        path = " ";
         pai = new int[16];
         cost = 0;
         solution = new int[16];
@@ -17,7 +17,7 @@ public class Tabela {
 
     public Tabela(int[] v) {
         arr = v;
-        path = "";
+        path = " ";
         pai = new int[16];
         cost = 0;
         solution = new int[16];
@@ -45,7 +45,14 @@ public class Tabela {
         return t.arr;
     }
 
+    public static char reversed(char t){
+        if(t == 'E')return 'D';
+        if(t == 'D')return 'E';
+        if(t == 'C')return 'B';
+        if(t == 'B')return 'C';
+        return ' ';
 
+    }
     public static void scanTabelas(Tabela t_inicial, Tabela t_final) {
 
         Scanner scan = new Scanner(System.in);
