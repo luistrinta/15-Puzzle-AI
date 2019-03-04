@@ -31,9 +31,9 @@ public class test extends Aux {
 
             case 2:
                 System.out.printf("\n###################\n\n|__DFS__|\n");
-                /*System.out.printf("Insert depth\n");
-                Scanner scan = new Scanner(System.in);*/
-                DFS(t_inicial, t_inicial.solution/*scan.nextInt())*/);
+                System.out.println("\nProfundidade utilizada : 80");
+                System.out.println("\n##################\n\n");
+                DFS(t_inicial, t_final.arr);
                 break;
 
             case 3:
@@ -55,12 +55,12 @@ public class test extends Aux {
                 a_star(t_inicial, t_inicial.solution);
                 break;
             case 6:
-                //System.out.printf("\n###################\n\n|__BFS__|\n");
-                //BFS(t_inicial, t_inicial.solution);
-                //System.out.printf("\n###################\n\n|__DFS__|\n");
-                //DFS(t_inicial, t_final.arr);
-                //System.out.printf("\n###################\n\n|__IDFS__|\n");
-                //IDFS(t_inicial, t_final);
+                System.out.printf("\n###################\n\n|__BFS__|\n");
+                BFS(t_inicial, t_inicial.solution);
+                System.out.printf("\n###################\n\n|__DFS__|\n");
+                DFS(t_inicial, t_final.arr);
+                System.out.printf("\n###################\n\n|__IDFS__|\n");
+                IDFS(t_inicial, t_final);
                 System.out.printf("\n###################\n\n|__Greedy_Alg_Manhattan__|\n");
                 greedy_Alg_Manhattan(t_inicial, t_inicial.solution);
                 System.out.printf("\n###################\n\n|__Greedy_Alg_Sum_Tiles__|\n");
