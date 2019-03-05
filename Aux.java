@@ -262,13 +262,10 @@ public class Aux extends Tabela {
 
     static class A_starComparator implements Comparator<Tabela> {
 
-        //Override do metodo compare do Comparator
+        //Override do metodo compare do Comparator com Manhattan distance + path.length
         public int compare(Tabela t1, Tabela t2) {
-            if (heuristicManhattan(t1.arr, t1.solution) > heuristicManhattan(t2.arr, t2.solution)) {
-                if (heuristicSum(t1.arr, t1.solution) > heuristicSum(t2.arr, t2.solution))
+            if (heuristicManhattan(t1.arr, t1.solution) + (t1.path.length())-1 > heuristicManhattan(t2.arr, t2.solution) + (t2.path.length())-1) {
                     return 1;
-
-                return -1;
             }
             return -1;
 
