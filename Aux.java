@@ -10,34 +10,27 @@ public class Aux extends Tabela {
         HashMap < String, Tabela > map = new HashMap < String, Tabela > ();
 
         int counter = 0;
-        
+        int counter2 =0;
         queue.add(t_inicial);
-        boolean flag = true;
-        while (flag) {
+        
+        while (!queue.isEmpty()) {
 
             Tabela valor = queue.poll();
-           
+
 
             String key = Arrays.toString(getArr(valor));
             if (!map.containsKey(key)) {
                 map.put(key, valor);
-
+                counter2++;
                 String[] s = checkMoves(valor);
 
                 for (String str : s) {
                     if (str != null) {
                         Tabela t2 = moveTabela(str, valor);
-                        if (!(Arrays.equals(getPai(t2), getPai(valor))))
-                            queue.add(t2);
-                        counter++;
-                    }
-                }
-
-            }
 
 
-            if (equalsTabela(valor.arr, t_final)) {
-                flag = false;
+                        if (equalsTabela(t2.arr, t_final)) {
+        
                 long stop_Time = System.currentTimeMillis();
                 long afterUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
                 long actualMemUsed = afterUsedMem - beforeUsedMem;
@@ -45,11 +38,24 @@ public class Aux extends Tabela {
                 System.out.println("Execution time: " + tempo_exec + "ms");
                 if(actualMemUsed < 1000000)System.out.println("Memory used : " + actualMemUsed / 1000 + "Kb");
                 else System.out.println("Memory used : " + actualMemUsed / 1000000 + "MB");
-                System.out.println("Path:" + valor.path);
-                System.out.println("Path length:" + (valor.path.length()-1));
-                System.out.println(" nº nos : " + counter);
-               
+                System.out.println("Path:" + t2.path);
+                System.out.println("Path length:" + (t2.path.length() - 1));
+                System.out.println(" nº nos criados : " + counter);
+                System.out.println(" nº nos visitados : "+ counter2);
+                return;
             }
+
+
+                        if (!(Arrays.equals(getPai(t2), getPai(valor))))
+                            queue.add(t2);
+                            counter++;
+                    }
+                }
+
+            }
+
+
+
         }
     }
 
@@ -99,20 +105,38 @@ public class Aux extends Tabela {
         Stack < Tabela > stk = new Stack < > ();
 
         int counter = 0;
+        int counter2 =0;
 
         stk.push(t_inicial);
         boolean flag = true;
         while (!stk.isEmpty()) {
 
             Tabela valor = stk.pop();
-            if(valor.path.length() < 20) {
+            counter2++;
+            if(valor.path.length() < 80) {
 
                 String[] s = checkMoves(valor);
 
                 for (String str : s) {
                     if (str != null) {
+                        
                         if(str.charAt(0) != reversed(valor.path.charAt(valor.path.length() - 1))) {
                             Tabela t2 = moveTabela(str, valor);
+                if (equalsTabela(t2.arr, t_final)) {
+        
+                long stop_Time = System.currentTimeMillis();
+                long afterUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+                long actualMemUsed = afterUsedMem - beforeUsedMem;
+                long tempo_exec = (stop_Time - start_Time);
+                System.out.println("Execution time: " + tempo_exec + "ms");
+                if(actualMemUsed < 1000000)System.out.println("Memory used : " + actualMemUsed / 1000 + "Kb");
+                else System.out.println("Memory used : " + actualMemUsed / 1000000 + "MB");
+                System.out.println("Path:" + t2.path);
+                System.out.println("Path length:" + (t2.path.length() - 1));
+                   System.out.println(" nº nos criados : " + counter);
+                System.out.println(" nº nos visitados : "+ counter2);                
+                return;
+            }
                             stk.push(t2);
                             counter++;
                         }
@@ -122,21 +146,7 @@ public class Aux extends Tabela {
             }
 
 
-            if (equalsTabela(valor.arr, t_final)) {
-
-                long stop_Time = System.currentTimeMillis();
-                long afterUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-                long actualMemUsed = afterUsedMem - beforeUsedMem;
-                long tempo_exec = (stop_Time - start_Time);
-                System.out.println("Execution time: " + tempo_exec + "ms");
-                if(actualMemUsed < 1000000)System.out.println("Memory used : " + actualMemUsed / 1000 + "Kb");
-                else System.out.println("Memory used : " + actualMemUsed / 1000000 + "MB");
-                System.out.println("Path:" + valor.path);
-                System.out.println("Path length:" + (valor.path.length()-1));
-                System.out.println(" nº nos : " + counter);
-                
-                return;
-            }
+           
         }
     }
 
@@ -144,29 +154,32 @@ public class Aux extends Tabela {
         Stack < Tabela > queue = new Stack < > ();
         HashMap < String, Tabela > map = new HashMap < String, Tabela > ();
         int counter = 0;
+        int counter2 =0;
         queue.push(t_inicial);
-        String[] v = {"1", "", "0"};
+        String[] v = {"1", "", "0","0"};
         while (!queue.isEmpty()) {
             Tabela valor = queue.pop();
+            counter2++;
             String key = Arrays.toString(getArr(valor));
             if(valor.path.length() <= depth) {
-               
-                    String[] s = checkMoves(valor);
-                    for (String str : s) {
-                        if (str != null) {
-                            if(str.charAt(0) != reversed(valor.path.charAt(valor.path.length() - 1))) {
-                                Tabela t2 = moveTabela(str, valor);
-                                if (!(Arrays.equals(getPai(t2), getPai(valor))))
-                                    queue.push(t2);
-                                counter++;
-                            }
+
+                String[] s = checkMoves(valor);
+                for (String str : s) {
+                    if (str != null) {
+                        if(str.charAt(0) != reversed(valor.path.charAt(valor.path.length() - 1))) {
+                            Tabela t2 = moveTabela(str, valor);
+                            if (!(Arrays.equals(getPai(t2), getPai(valor))))
+                                queue.push(t2);
+                            counter++;
                         }
                     }
-                
-            } 
+                }
+
+            }
 
             if (equalsTabela(valor.arr, t_final.arr)) {
                 v[2] = Integer.toString(counter);
+                v[3] = Integer.toString(counter2);
                 v[1] = valor.path;
                 return v;
             }
@@ -178,11 +191,12 @@ public class Aux extends Tabela {
     public static void IDFS(Tabela t_inicial, Tabela t_final) {
         long start_Time = System.currentTimeMillis();
         long beforeUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-        int counter = 1, i = 0, fours = 1, f1 = 1;
+        int counter = 1, counter2 =1,i = 0, fours = 1, f1 = 1;
         String[] v = auxDFS(t_inicial, t_final, 0);
         while(v[0] == "0") {
             v = auxDFS(t_inicial, t_final, i);
             counter = counter + Integer.parseInt(v[2]);
+            counter2 += Integer.parseInt(v[3]);
             i++;
         }
         long stop_Time = System.currentTimeMillis();
@@ -192,10 +206,10 @@ public class Aux extends Tabela {
         System.out.println("Execution time: " + tempo_exec + "ms");
         if(actualMemUsed < 1000000)System.out.println("Memory used : " + actualMemUsed / 1000 + "Kb");
         else System.out.println("Memory used : " + actualMemUsed / 1000000 + "MB");
-        //System.out.println("Memory used : " + actualMemUsed + " Bytes");
         System.out.println("Path:" + v[1]);
-        System.out.println("Path length:" +( v[1].length()-1));
-        System.out.println(" nº Tabelas : " + counter);
+        System.out.println("Path length:" + ( v[1].length() - 1));
+           System.out.println(" nº nos criados : " + counter);
+                System.out.println(" nº nos visitados : "+ counter2);
         return;
     }
 
@@ -224,8 +238,6 @@ public class Aux extends Tabela {
             int poss = pos + 1;
             int pos1[] = {(ii % 4 != 0) ? ii / 4 + 1 : ii / 4, ii % 4 == 0 ? 4 : ii % 4};
             int pos2[] = {(poss % 4 != 0) ? poss / 4 + 1 : poss / 4, poss % 4 == 0 ? 4 : poss % 4};
-            //System.out.printf("Numero %02d | Posição Array %02d | Coordenadas1 %02dx%02dy | Coordenadas2 %02dx%02dy\n", arr[i], poss, pos1[0], pos1[1], pos2[0], pos2[1]);
-            //System.out.println(counter+" "+(pos1[0]>=pos2[0])+" "+ (pos1[0]>=pos2[0] ? pos1[0]-pos2[0] : pos2[0]-pos1[0])+"+"+(pos1[1]>=pos2[1] ? pos1[1]-pos2[1] : pos2[1]-pos1[1]));
             counter = counter + (pos1[0] >= pos2[0] ? pos1[0] - pos2[0] : pos2[0] - pos1[0])
                       + (pos1[1] >= pos2[1] ? pos1[1] - pos2[1] : pos2[1] - pos1[1]);
         }
@@ -260,179 +272,242 @@ public class Aux extends Tabela {
         }
     }
 
-    static class A_starComparator implements Comparator<Tabela> {
+    static class A_starComparator_Manhattan implements Comparator<Tabela> {
 
-        //Override do metodo compare do Comparator com Manhattan distance + path.length
+        //Override do metodo compare do Comparator
         public int compare(Tabela t1, Tabela t2) {
-            if (heuristicManhattan(t1.arr, t1.solution) + (t1.path.length())-1 > heuristicManhattan(t2.arr, t2.solution) + (t2.path.length())-1) {
-                    return 1;
-            }
-            return -1;
+                    if (heuristicManhattan(t1.arr, t1.solution) + (t1.path.length() - 1) > heuristicManhattan(t2.arr, t2.solution) + (t2.path.length() - 1)) 
+                return 1;
+                return -1;
+                  
+        }
+    }
 
+     static class A_starComparator_TileSum implements Comparator<Tabela> {
+
+        //Override do metodo compare do Comparator
+        public int compare(Tabela t1, Tabela t2) {
+                    if (heuristicSum(t1.arr, t1.solution) + (t1.path.length() - 1) > heuristicSum(t2.arr, t2.solution) + (t2.path.length() - 1)) 
+                return 1;
+                return -1;
+                  
         }
     }
 
 
 
+        public static void greedy_Alg_Manhattan(Tabela t_inicial, int[] t_final ) {
+
+            long start_Time = System.currentTimeMillis();
+            long beforeUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+            PriorityQueue < Tabela > queue = new PriorityQueue <Tabela>(new ManhattanComparator());
+            HashMap < String, Tabela > map = new HashMap < String, Tabela > ();
+
+            int counter = 0;
+            int counter2 =0;
+
+            queue.add(t_inicial);
+            boolean flag = true;
+            while (!queue.isEmpty()) {
+
+                Tabela valor = queue.poll();
 
 
-    public static void greedy_Alg_Manhattan(Tabela t_inicial, int[] t_final ) {
+                String key = Arrays.toString(getArr(valor));
+                if (!map.containsKey(key)) {
+                    map.put(key, valor);
+                    counter2++;
+                    String[] s = checkMoves(valor);
 
-        long start_Time = System.currentTimeMillis();
-        long beforeUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-        PriorityQueue < Tabela > queue = new PriorityQueue <Tabela>(new ManhattanComparator());
-        HashMap < String, Tabela > map = new HashMap < String, Tabela > ();
-
-        int counter = 0;
-        
-        queue.add(t_inicial);
-        boolean flag = true;
-        while (!queue.isEmpty()) {
-
-            Tabela valor = queue.poll();
-            
-
-            String key = Arrays.toString(getArr(valor));
-            if (!map.containsKey(key)) {
-                map.put(key, valor);
-
-                String[] s = checkMoves(valor);
-
-                for (String str : s) {
-                    if (str != null) {
-                        Tabela t2 = moveTabela(str, valor);
-                        if (!(Arrays.equals(getPai(t2), getPai(valor))))
-                            queue.add(t2);
-                        counter++;
+                    for (String str : s) {
+                        if (str != null) {
+                            Tabela t2 = moveTabela(str, valor);
+                            if (!(Arrays.equals(getPai(t2), getPai(valor))))
+                                queue.add(t2);
+                            counter++;
+                        }
                     }
+
                 }
 
-            }
 
-
-            if (equalsTabela(valor.arr, t_final)) {
-                long stop_Time = System.currentTimeMillis();
-                long afterUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-                long actualMemUsed = afterUsedMem - beforeUsedMem;
-                long tempo_exec = (stop_Time - start_Time);
-                System.out.println("Execution time: " + tempo_exec + "ms");
-                if(actualMemUsed < 1000000)System.out.println("Memory used : " + actualMemUsed / 1000 + "Kb");
-                else System.out.println("Memory used : " + actualMemUsed / 1000000 + "MB");
-                System.out.println("Path:" + valor.path);
-                System.out.println("Path length:" + (valor.path.length()-1));
-                System.out.println(" nº nos : " + counter);
-                return;
+                if (equalsTabela(valor.arr, t_final)) {
+                    long stop_Time = System.currentTimeMillis();
+                    long afterUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+                    long actualMemUsed = afterUsedMem - beforeUsedMem;
+                    long tempo_exec = (stop_Time - start_Time);
+                    System.out.println("Execution time: " + tempo_exec + "ms");
+                    if(actualMemUsed < 1000000)System.out.println("Memory used : " + actualMemUsed / 1000 + "Kb");
+                    else System.out.println("Memory used : " + actualMemUsed / 1000000 + "MB");
+                    System.out.println("Path:" + valor.path);
+                    System.out.println("Path length:" + (valor.path.length() - 1));
+                    System.out.println(" nº nos criados: " + counter);
+                    System.out.println(" nª nos visitados: " + counter2);
+                    return;
+                }
             }
         }
-    }
 
 
 
-    public static void greedy_Alg_TileSum(Tabela t_inicial, int[] t_final) {
+        public static void greedy_Alg_TileSum(Tabela t_inicial, int[] t_final) {
 
-        long start_Time = System.currentTimeMillis();
-        long beforeUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+            long start_Time = System.currentTimeMillis();
+            long beforeUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
 
-        PriorityQueue < Tabela > queue = new PriorityQueue <Tabela>(new SumComparator());
-        HashMap < String, Tabela > map = new HashMap < String, Tabela > ();
+            PriorityQueue < Tabela > queue = new PriorityQueue <Tabela>(new SumComparator());
+            HashMap < String, Tabela > map = new HashMap < String, Tabela > ();
 
-        int counter = 0;
-        // int filhos =0;
-        queue.add(t_inicial);
+            int counter = 0;
+            int counter2 =0;
+            queue.add(t_inicial);
 
-        while (!queue.isEmpty()) {
+            while (!queue.isEmpty()) {
 
-            Tabela valor = queue.poll();
-            //filhos ++;
+                Tabela valor = queue.poll();
 
-            String key = Arrays.toString(getArr(valor));
-            if (!map.containsKey(key)) {
-                map.put(key, valor);
+                String key = Arrays.toString(getArr(valor));
+                if (!map.containsKey(key)) {
+                    map.put(key, valor);
+                    counter2 ++;
 
-                String[] s = checkMoves(valor);
+                    String[] s = checkMoves(valor);
 
-                for (String str : s) {
-                    if (str != null) {
-                        Tabela t2 = moveTabela(str, valor);
-                        if (!(Arrays.equals(getPai(t2), getPai(valor))))
-                            queue.add(t2);
-                        counter++;
+                    for (String str : s) {
+                        if (str != null) {
+                            Tabela t2 = moveTabela(str, valor);
+                            if (!(Arrays.equals(getPai(t2), getPai(valor))))
+                                queue.add(t2);
+                            counter++;
+                        }
                     }
+
                 }
 
-            }
 
-
-            if (equalsTabela(valor.arr, t_final)) {
-                long stop_Time = System.currentTimeMillis();
-                long afterUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-                long actualMemUsed = afterUsedMem - beforeUsedMem;
-                long tempo_exec = (stop_Time - start_Time);
-                System.out.println("Execution time: " + tempo_exec + "ms");
-                if(actualMemUsed < 1000000)System.out.println("Memory used : " + actualMemUsed / 1000 + "Kb");
-                else System.out.println("Memory used : " + actualMemUsed / 1000000 + "MB");
-                System.out.println("Path:" + valor.path);
-                System.out.println("Path length:" + (valor.path.length()-1));
-                System.out.println(" nº nos : " + counter);
-                return;
+                if (equalsTabela(valor.arr, t_final)) {
+                    long stop_Time = System.currentTimeMillis();
+                    long afterUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+                    long actualMemUsed = afterUsedMem - beforeUsedMem;
+                    long tempo_exec = (stop_Time - start_Time);
+                    System.out.println("Execution time: " + tempo_exec + "ms");
+                    if(actualMemUsed < 1000000)System.out.println("Memory used : " + actualMemUsed / 1000 + "Kb");
+                    else System.out.println("Memory used : " + actualMemUsed / 1000000 + "MB");
+                    System.out.println("Path:" + valor.path);
+                    System.out.println("Path length:" + (valor.path.length() - 1));
+                    System.out.println(" nº nos criados: " + counter);
+                    System.out.println(" nº nos visitados: " + counter2);
+                    return;
+                }
             }
         }
-    }
 
 
 
-    public static void a_star(Tabela t_inicial, int[] t_final ) {
+        public static void a_star_M(Tabela t_inicial, int[] t_final ) {
 
-        long start_Time = System.currentTimeMillis();
-        long beforeUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-        PriorityQueue < Tabela > queue = new PriorityQueue <Tabela>(new A_starComparator());
-        HashMap < String, Tabela > map = new HashMap < String, Tabela > ();
+            long start_Time = System.currentTimeMillis();
+            long beforeUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+            PriorityQueue < Tabela > queue = new PriorityQueue <Tabela>(new A_starComparator_Manhattan());
+            HashMap < String, Tabela > map = new HashMap < String, Tabela > ();
 
-        int counter = 0;
-        // int filhos =0;
-        queue.add(t_inicial);
-        boolean flag = true;
-        while (!queue.isEmpty()) {
+            int counter = 0;
+            int counter2 =0;
+            queue.add(t_inicial);
+            boolean flag = true;
+            while (!queue.isEmpty()) {
 
-            Tabela valor = queue.poll();
-            //filhos ++;
+                Tabela valor = queue.poll();
+                counter2 ++;
 
-            String key = Arrays.toString(getArr(valor));
-            if (!map.containsKey(key)) {
-                map.put(key, valor);
+                String key = Arrays.toString(getArr(valor));
+                if (!map.containsKey(key)) {
+                    map.put(key, valor);
 
-                String[] s = checkMoves(valor);
+                    String[] s = checkMoves(valor);
 
-                for (String str : s) {
-                    if (str != null) {
-                        Tabela t2 = moveTabela(str, valor);
-                        if (!(Arrays.equals(getPai(t2), getPai(valor))))
-                            queue.add(t2);
-                        counter++;
+                    for (String str : s) {
+                        if (str != null) {
+                            Tabela t2 = moveTabela(str, valor);
+                            if (!(Arrays.equals(getPai(t2), getPai(valor))))
+                                queue.add(t2);
+                            counter++;
+                        }
                     }
+
                 }
 
-            }
 
-
-            if (equalsTabela(valor.arr, t_final)) {
-                long stop_Time = System.currentTimeMillis();
-                long afterUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-                long actualMemUsed = afterUsedMem - beforeUsedMem;
-                long tempo_exec = (stop_Time - start_Time);
-                System.out.println("Execution time: " + tempo_exec + "ms");
-                if(actualMemUsed < 1000000)System.out.println("Memory used : " + actualMemUsed / 1000 + "Kb");
-                else System.out.println("Memory used : " + actualMemUsed / 1000000 + "MB");
-                System.out.println("Path:" + valor.path);
-                System.out.println("Path length:" + (valor.path.length()-1));
-                System.out.println(" nº nos : " + counter);
-                return;
+                if (equalsTabela(valor.arr, t_final)) {
+                    long stop_Time = System.currentTimeMillis();
+                    long afterUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+                    long actualMemUsed = afterUsedMem - beforeUsedMem;
+                    long tempo_exec = (stop_Time - start_Time);
+                    System.out.println("Execution time: " + tempo_exec + "ms");
+                    if(actualMemUsed < 1000000)System.out.println("Memory used : " + actualMemUsed / 1000 + "Kb");
+                    else System.out.println("Memory used : " + actualMemUsed / 1000000 + "MB");
+                    System.out.println("Path:" + valor.path);
+                    System.out.println("Path length:" + (valor.path.length() - 1));
+                    System.out.println(" nº nos criados : " + counter);
+                    System.out.println(" nº nos visitados : "+ counter2);
+                    return;
+                }
             }
         }
+
+
+         public static void a_star_TS(Tabela t_inicial, int[] t_final ) {
+
+            long start_Time = System.currentTimeMillis();
+            long beforeUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+            PriorityQueue < Tabela > queue = new PriorityQueue <Tabela>(new A_starComparator_TileSum());
+            HashMap < String, Tabela > map = new HashMap < String, Tabela > ();
+
+            int counter = 0;
+            int filhos =0;
+            queue.add(t_inicial);
+            boolean flag = true;
+            while (!queue.isEmpty()) {
+
+                Tabela valor = queue.poll();
+                filhos ++;
+
+                String key = Arrays.toString(getArr(valor));
+                if (!map.containsKey(key)) {
+                    map.put(key, valor);
+
+                    String[] s = checkMoves(valor);
+
+                    for (String str : s) {
+                        if (str != null) {
+                            Tabela t2 = moveTabela(str, valor);
+                            if (!(Arrays.equals(getPai(t2), getPai(valor))))
+                                queue.add(t2);
+                            counter++;
+                        }
+                    }
+
+                }
+
+
+                if (equalsTabela(valor.arr, t_final)) {
+                    long stop_Time = System.currentTimeMillis();
+                    long afterUsedMem = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+                    long actualMemUsed = afterUsedMem - beforeUsedMem;
+                    long tempo_exec = (stop_Time - start_Time);
+                    System.out.println("Execution time: " + tempo_exec + "ms");
+                    if(actualMemUsed < 1000000)System.out.println("Memory used : " + actualMemUsed / 1000 + "Kb");
+                    else System.out.println("Memory used : " + actualMemUsed / 1000000 + "MB");
+                    System.out.println("Path:" + valor.path);
+                    System.out.println("Path length:" + (valor.path.length() - 1));
+                       System.out.println(" nº nos criados : " + counter);
+                System.out.println(" nº nos visitados : "+ filhos);
+                    return;
+                }
+            }
+        }
+
     }
-
-
-}
 
 
 
