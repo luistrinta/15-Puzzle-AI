@@ -307,7 +307,7 @@ public class Aux extends Tabela {
             int counter2 =0;
 
             queue.add(t_inicial);
-            boolean flag = true;
+            
             while (!queue.isEmpty()) {
 
                 Tabela valor = queue.poll();
@@ -414,7 +414,7 @@ public class Aux extends Tabela {
             int counter = 0;
             int counter2 =0;
             queue.add(t_inicial);
-            boolean flag = true;
+            
             while (!queue.isEmpty()) {
 
                 Tabela valor = queue.poll();
@@ -466,7 +466,7 @@ public class Aux extends Tabela {
             int counter = 0;
             int filhos =0;
             queue.add(t_inicial);
-            boolean flag = true;
+           
             while (!queue.isEmpty()) {
 
                 Tabela valor = queue.poll();
@@ -500,8 +500,8 @@ public class Aux extends Tabela {
                     else System.out.println("Memory used : " + actualMemUsed / 1000000 + "MB");
                     System.out.println("Path:" + valor.path);
                     System.out.println("Path length:" + (valor.path.length() - 1));
-                       System.out.println(" nº nos criados : " + counter);
-                System.out.println(" nº nos visitados : "+ filhos);
+                    System.out.println(" nº nos criados : " + counter);
+                    System.out.println(" nº nos visitados : "+ filhos);
                     return;
                 }
             }
